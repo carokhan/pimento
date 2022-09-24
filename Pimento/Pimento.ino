@@ -5,6 +5,7 @@ int smaxFLpwm = 3;
 int smaxFRpwm = 5;
 int smaxBLpwm = 6;
 int smaxBRpwm = 9;
+int fl0, fr1, bl2, br3;
 
 int leftXChannel = 1;
 int leftYChannel = 2;
@@ -26,9 +27,9 @@ unsigned long int a,b,c;
 int x[15],ch1[15],ch[7],i;
 
 void mecanum() {
-  kx = ch[leftXChannel] + 1000;
-  ky = (ch[leftYChannel] * 1) + 1000;
-  kstrafe = ch[rightXChannel] + 1000;
+  kx = ch[leftXChannel];
+  ky = ch[leftYChannel];
+  kstrafe = ch[rightXChannel];
 
   // smaxs[0].write(ky + kx + kstrafe);
   // smaxs[1].write(ky - kx - kstrafe);
@@ -39,11 +40,28 @@ void mecanum() {
   Serial.println(kx);
   Serial.println(kstrafe);
 
-  Serial.println("Test");
-  smaxs[0].write((ky + kx + kstrafe + 3000)/9 + 1000);
-  smaxs[1].write((ky - kx - kstrafe + 3000)/9 + 1000);
-  smaxs[2].write((ky - kx + kstrafe + 3000)/9 + 1000);
-  smaxs[3].write((ky + kx - kstrafe + 3000)/9 + 1000);
+  fl0 = ky + kx + kstrafe; // 0 to 3000
+  fr1 = ky - kx - kstrafe; // -2000 to 1000
+  bl2 = ky - kx + kstrafe; // -1000 to 2000
+  br3 = ky + kx - kstrafe; // -1000 to 2000
+
+  fl0 = fl0 / 3 + 1000;
+  fr1 = (fr1 + 2000) / 3 + 1000;
+  bl2 = (bl2 + 1000) / 3 + 1000;
+  br3 = (br3 + 1000) / 3 + 1000;
+
+
+  // Serial.println("Test");
+
+  Serial.print(fl0);Serial.print("\t");
+  Serial.print(fr1);Serial.print("\t");
+  Serial.print(bl2);Serial.print("\t");
+  Serial.print(br3);Serial.print("\t");
+
+  smaxs[0].write(fl0);
+  smaxs[1].write(fr1);
+  smaxs[2].write(bl2);
+  smaxs[3].write(br3);
 }
 
 void setup() {
