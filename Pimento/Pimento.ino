@@ -7,9 +7,11 @@ int smaxBLpwm = 6;
 int smaxBRpwm = 9;
 int fl0, fr1, bl2, br3;
 
-int leftXChannel = 1;
-int leftYChannel = 2;
-int rightXChannel = 3;
+int leftXChannel = 4;
+int leftYChannel = 3;
+int rightXChannel = 1;
+
+int separator = 5000;
 
 Servo smaxs[4];
 
@@ -18,8 +20,6 @@ int channelAmount = 6;
 
 unsigned long int current, past, interval;
 int order[15], channel1, channel[6], channelInit[15];  
-
-int separator = 5000;
 
 unsigned long int kx, ky, kstrafe;  
 
@@ -35,10 +35,25 @@ void mecanum() {
   // smaxs[1].write(ky - kx - kstrafe);
   // smaxs[2].write(ky - kx + kstrafe);
   // smaxs[3].write(ky + kx - kstrafe);
+  Serial.print("\t");Serial.print("\t");Serial.print("\t");
+  Serial.print(ky);Serial.print("\t");
+  Serial.print(kx);Serial.print("\t");
+  Serial.print(kstrafe);Serial.print("\t");
+  Serial.print("\t");Serial.print("\t");Serial.print("\t");
 
-  Serial.println(ky);
-  Serial.println(kx);
-  Serial.println(kstrafe);
+  if ((ky > 1100) || (ky < -100)) {
+    Serial.println();
+    return;
+  }
+  if ((kx > 1100) || (kx < -100)) {
+    Serial.println();
+    return;
+  }
+  if ((kstrafe > 1100) || (kstrafe < -100)) {
+    Serial.println();
+    return;
+  }
+    
 
   fl0 = ky + kx + kstrafe; // 0 to 3000
   fr1 = ky - kx - kstrafe; // -2000 to 1000
@@ -57,11 +72,12 @@ void mecanum() {
   Serial.print(fr1);Serial.print("\t");
   Serial.print(bl2);Serial.print("\t");
   Serial.print(br3);Serial.print("\t");
+  Serial.println();
 
-  smaxs[0].write(fl0);
-  smaxs[1].write(fr1);
-  smaxs[2].write(bl2);
-  smaxs[3].write(br3);
+  // smaxs[0].write(fl0);
+  // smaxs[1].write(fr1);
+  // smaxs[2].write(bl2);
+  // smaxs[3].write(br3);
 }
 
 void setup() {
@@ -86,12 +102,14 @@ void setup() {
 void loop() {
 read_rc();
 
-// Serial.print(ch[1]);Serial.print("\t");
 // Serial.print(ch[2]);Serial.print("\t");
-// Serial.print(ch[3]);Serial.print("\t");
-// Serial.print(ch[4]);Serial.print("\t");
+Serial.print(ch[leftYChannel]);Serial.print("\t");
+Serial.print(ch[leftXChannel]);Serial.print("\t");
+Serial.print(ch[rightXChannel]);Serial.print("\t");
+
 // Serial.print(ch[5]);Serial.print("\t");
-// Serial.print(ch[6]);Serial.print("\n");
+// Serial.print(ch[6]);Serial.print("\t");
+// Serial.println();
 /*ESC1.write();
 ESC2.write();
 ESC3.write();
@@ -114,5 +132,5 @@ i=i+1;       if(i==15){for(int j=0;j<15;j++) {ch1[j]=x[j];}
              i=0;}}//copy store all values from temporary array another array after 15 reading  
 void read_rc(){
 int i,j,k=0;
-  for(k=14;k>-1;k--){if(ch1[k]>10000){j=k;}}  //detecting separation space 10000us in that another array                     
+  for(k=14;k>-1;k--){if(ch1[k]>separator){j=k;}}  //detecting separation space 10000us in that another array                     
   for(i=1;i<=6;i++){ch[i]=(ch1[i+j]-1000);}}     //assign 6 channel values after separation space
