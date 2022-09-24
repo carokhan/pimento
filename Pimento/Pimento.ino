@@ -5,7 +5,8 @@ int smaxFLpwm = 3;
 int smaxFRpwm = 5;
 int smaxBLpwm = 6;
 int smaxBRpwm = 9;
-int fl0, fr1, bl2, br3;
+double fl0, fr1, bl2, br3;
+int fl0C, fr1C, bl2C, br3C ;
 
 int leftXChannel = 4;
 int leftYChannel = 3;
@@ -21,7 +22,7 @@ int channelAmount = 6;
 unsigned long int current, past, interval;
 int order[15], channel1, channel[6], channelInit[15];  
 
-unsigned long int kx, ky, kstrafe;  
+long int kx, ky, kstrafe;  
 
 unsigned long int a,b,c;
 int x[15],ch1[15],ch[7],i;
@@ -35,49 +36,63 @@ void mecanum() {
   // smaxs[1].write(ky - kx - kstrafe);
   // smaxs[2].write(ky - kx + kstrafe);
   // smaxs[3].write(ky + kx - kstrafe);
-  Serial.print("\t");Serial.print("\t");Serial.print("\t");
+  // Serial.print("\t");Serial.print("\t");Serial.print("\t");
   Serial.print(ky);Serial.print("\t");
   Serial.print(kx);Serial.print("\t");
   Serial.print(kstrafe);Serial.print("\t");
   Serial.print("\t");Serial.print("\t");Serial.print("\t");
+  // Serial.println();
 
   if ((ky > 1100) || (ky < -100)) {
-    Serial.println();
+    Serial.println("ky");
     return;
   }
   if ((kx > 1100) || (kx < -100)) {
-    Serial.println();
+    Serial.println("kx");
     return;
   }
   if ((kstrafe > 1100) || (kstrafe < -100)) {
-    Serial.println();
+    Serial.println("kstrafe");
     return;
   }
-    
+
+   if ((ky > 450) && (ky < 550)) {
+    ky = 500;
+  }
+  if ((kx > 450) && (kx < 550)) {
+    kx = 500;
+  }
+  if ((kstrafe > 450) && (kstrafe < 550)) {
+    kstrafe = 500;
+  }
+
+  // Serial.println("Hi");  
 
   fl0 = ky + kx + kstrafe; // 0 to 3000
   fr1 = ky - kx - kstrafe; // -2000 to 1000
   bl2 = ky - kx + kstrafe; // -1000 to 2000
   br3 = ky + kx - kstrafe; // -1000 to 2000
 
-  fl0 = fl0 / 3 + 1000;
-  fr1 = (fr1 + 2000) / 3 + 1000;
-  bl2 = (bl2 + 1000) / 3 + 1000;
-  br3 = (br3 + 1000) / 3 + 1000;
+  fl0C =(int)((double)fl0 / 3.0 + 1000);
+  fr1C = (int)(((double)fr1 + 2000) / 3.0 + 1000);
+  bl2C =(int) (((double)bl2 + 1000) / 3.0 + 1000);
+  br3C = (int)(((double)br3 + 1000) / 3.0 + 1000);
+  // Serial.print(kx);Serial.print("\t\t");Serial.print(ky);Serial.print("\t\t");Serial.print(kstrafe);
+  // Serial.print(fl0); Serial.print("\t\t"); Serial.print(fl0C); Serial.print("\t\t");
 
 
   // Serial.println("Test");
 
-  Serial.print(fl0);Serial.print("\t");
-  Serial.print(fr1);Serial.print("\t");
-  Serial.print(bl2);Serial.print("\t");
-  Serial.print(br3);Serial.print("\t");
+  Serial.print(fl0C);Serial.print("\t");
+  Serial.print(fr1C);Serial.print("\t");
+  Serial.print(bl2C);Serial.print("\t");
+  Serial.print(br3C);Serial.print("\t");
   Serial.println();
 
-  // smaxs[0].write(fl0);
-  // smaxs[1].write(fr1);
-  // smaxs[2].write(bl2);
-  // smaxs[3].write(br3);
+  // smaxs[0].write(fl0C);
+  // smaxs[1].write(fr1C);
+  // smaxs[2].write(bl2C);
+  // smaxs[3].write(br3C);
 }
 
 void setup() {
@@ -103,9 +118,9 @@ void loop() {
 read_rc();
 
 // Serial.print(ch[2]);Serial.print("\t");
-Serial.print(ch[leftYChannel]);Serial.print("\t");
-Serial.print(ch[leftXChannel]);Serial.print("\t");
-Serial.print(ch[rightXChannel]);Serial.print("\t");
+// Serial.print(ch[leftYChannel]);Serial.print("\t");
+// Serial.print(ch[leftXChannel]);Serial.print("\t");
+// Serial.print(ch[rightXChannel]);Serial.print("\t");
 
 // Serial.print(ch[5]);Serial.print("\t");
 // Serial.print(ch[6]);Serial.print("\t");
