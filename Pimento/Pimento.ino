@@ -89,10 +89,10 @@ void mecanum() {
   Serial.print(br3C);Serial.print("\t");
   Serial.println();
 
-  // smaxs[0].write(fl0C);
-  // smaxs[1].write(fr1C);
-  // smaxs[2].write(bl2C);
-  // smaxs[3].write(br3C);
+  smaxs[0].write(fl0C);
+  smaxs[1].write(fr1C);
+  smaxs[2].write(bl2C);
+  smaxs[3].write(br3C);
 }
 
 void setup() {
