@@ -5,7 +5,7 @@ int smaxFRpwm = 6; // 6
 int smaxBLpwm = 5; // 5
 int smaxBRpwm = 9;
 double fl0, fr1, bl2, br3;
-int fl0C, fr1C, bl2C, br3C;
+int fl0C, fr1C, bl2C, br3C, fl0C2, bl2C2;
 
 int leftXChannel = 4;
 int leftYChannel = 3;
@@ -36,15 +36,15 @@ void mecanum() {
   // smaxs[2].write(ky - kx + kstrafe);
   // smaxs[3].write(ky + kx - kstrafe);
   // Serial.print("\t");Serial.print("\t");Serial.print("\t");
-  Serial.print(ky);
-  Serial.print("\t");
-  Serial.print(kx);
-  Serial.print("\t");
-  Serial.print(kstrafe);
-  Serial.print("\t");
-  Serial.print("\t");
-  Serial.print("\t");
-  Serial.print("\t");
+  // Serial.print(ky);
+  // Serial.print("\t");
+  // Serial.print(kx);
+  // Serial.print("\t");
+  // Serial.print(kstrafe);
+  // Serial.print("\t");
+  // Serial.print("\t");
+  // Serial.print("\t");
+  // Serial.print("\t");
   // Serial.println();
 
   if ((ky > 1100) || (ky < -100)) {
@@ -78,28 +78,33 @@ void mecanum() {
   br3 = ky + kx - kstrafe; // -1000 to 2000
 
   fl0C = (int)((double) fl0 / 3.0 + 1000);
+  fl0C2 = ((fl0C - 1500) * -1) + 1500;
   fr1C = (int)(((double) fr1 + 2000) / 3.0 + 1000);
+  // fr1C = abs(fr1C - 1500) * -1 + fr1C;
+
   // bl2C = (int)(((((double) bl2 + 1000) / 3.0) - 500) * 1.05 + 1500);
   bl2C = (int)((((double) bl2 + 1000) / 3.0) + 1000);
+  bl2C2 = ((bl2C - 1500) * -1) + 1500;
   br3C = (int)(((double) br3 + 1000) / 3.0 + 1000);
+  // br3C = abs(br3C - 1500) * -1 + br3C;
   // Serial.print(kx);Serial.print("\t\t");Serial.print(ky);Serial.print("\t\t");Serial.print(kstrafe);
   // Serial.print(fl0); Serial.print("\t\t"); Serial.print(fl0C); Serial.print("\t\t");
 
   // Serial.println("Test");
 
-  Serial.print(fl0C);
+  Serial.print(fl0C2);
   Serial.print("\t");
   Serial.print(fr1C);
   Serial.print("\t");
-  Serial.print(bl2C);
+  Serial.print(bl2C2);
   Serial.print("\t");
   Serial.print(br3C);
   Serial.print("\t");
   Serial.println();
 
-  smaxs[0].write(fl0C);
+  smaxs[0].write(fl0C2);
   smaxs[1].write(fr1C);
-  smaxs[2].write(bl2C);
+  smaxs[2].write(bl2C2);
   smaxs[3].write(br3C);
 }
 
